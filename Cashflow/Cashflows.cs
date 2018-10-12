@@ -15,6 +15,7 @@ namespace Cashflow
 
     public class Cashflows
     {
+        // TODO : consider making set property protected if felt valuable to be able to inherit this class
         public List<double> BaseCashflows { get; private set; }
 
         public Cashflows(string filepath)
@@ -42,20 +43,17 @@ namespace Cashflow
                     discountCurve.ForwardCurve.Count, BaseCashflows.Count));
             }
 
-            // TODO : could make this parameter variable in a future development
+            // create array of discount factors as compounded terms in discount forward curve
+            // TODO : could make timing_adj parameter an input variable in a future development
             const double timing_adj = 0.5;
+            List<double> discountFactors = AccumulateForwardCurve(discountCurve.ForwardCurve, timing_adj);
 
-            // working backwards from final cashflow, at each step add the current
-            // cashflow and discount the running total by another year, using the
-            // average forward rate, assuming cashflows occur halfway through each period
+            // return sum of each cashflow divided by appropriate discount factor
             double pv = 0;
-            for (int i = BaseCashflows.Count - 1; i > 0; i--)
+            for (int i = 0; i < BaseCashflows.Count; i++)
             {
-                pv += BaseCashflows[i];
-                pv /= Math.Pow((1 + discountCurve.ForwardCurve[i - 1]) * (1 + discountCurve.ForwardCurve[i]), timing_adj);
+                pv += BaseCashflows[i] / discountFactors[i];
             }
-            pv += BaseCashflows[0];
-            pv /= Math.Pow(1 + discountCurve.ForwardCurve[0], 0.5);
 
             return pv;
         }
@@ -71,18 +69,10 @@ namespace Cashflow
                     inflationCurve.SpotCurve.Count, BaseCashflows.Count));
             }
 
-            // create array of accumulation factors as compounded terms in 
-            // inflation forward curve (adjusted for timing of cashflows); then
-            // return a new Cashflows object with inflated cashflows
-            List<double> accumulationFactors = new List<double> { Math.Pow(1 + inflationCurve.ForwardCurve[0], 1 - increase_month / 12.0) };
-            for (int i = 1; i < BaseCashflows.Count; i++)
-            {
-                double accumulationFactor = accumulationFactors[i - 1];
-                accumulationFactor *= Math.Pow(1 + inflationCurve.ForwardCurve[i - 1], increase_month / 12.0);
-                accumulationFactor *= Math.Pow(1 + inflationCurve.ForwardCurve[i], 1 - increase_month / 12.0);
-                accumulationFactors.Add(accumulationFactor);
-            }
+            // create array of accumulation factors as compounded terms in inflation forward curve
+            List<double> accumulationFactors = AccumulateForwardCurve(inflationCurve.ForwardCurve, increase_month / 12.0);
 
+            // return a new Cashflows object with inflated cashflows
             List<double> inflatedCashflows = new List<double>();
             for (int i = 0; i < BaseCashflows.Count; i++)
             {
@@ -90,6 +80,31 @@ namespace Cashflow
             }
 
             return new Cashflows(inflatedCashflows);
+        }
+
+        // AccumulateForwardCurve :: Returns accumulated terms in a forward curve
+        //
+        // Rates are interpolated using specified timing parameter (specified as the
+        // proportion of the first term to compound)
+        private List<double> AccumulateForwardCurve(List<double> forwardCurve, double timing_adj)
+        {
+            List<double> accumulatedForwardCurve = new List<double>();
+
+            // forward rate for initial time period
+            accumulatedForwardCurve.Add(Math.Pow(1 + forwardCurve[0], 1 - timing_adj));
+
+            // forward rates for subsequent time periods
+            if (forwardCurve.Count > 1)
+            {
+                for (int i = 1; i < forwardCurve.Count; i++)
+                {
+                    double accumulatedForwardRate = Math.Pow(1 + forwardCurve[i - 1], timing_adj) * Math.Pow(1 + forwardCurve[i], 1 - timing_adj);
+                
+                    accumulatedForwardCurve.Add(accumulatedForwardCurve[i - 1] * accumulatedForwardRate);
+                }
+            }
+
+            return accumulatedForwardCurve;
         }
     }
 }

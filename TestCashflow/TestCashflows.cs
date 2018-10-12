@@ -71,7 +71,8 @@ namespace TestCashflow
             Cashflows cashflows = new Cashflows(inputCashflowsList);
             Cashflows inflatedCashflows = cashflows.Inflate(inflationCurve, 12);
             double inflatedCashflowSum = 0;
-            foreach (double inflatedCashflow in inflatedCashflows.BaseCashflows) {
+            foreach (double inflatedCashflow in inflatedCashflows.BaseCashflows)
+            {
                 inflatedCashflowSum += inflatedCashflow;
             }
             Assert.AreEqual(50458603, inflatedCashflowSum, 1);
