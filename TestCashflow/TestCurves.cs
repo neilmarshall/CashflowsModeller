@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using System.Collections.Generic;
+using System.IO;
 
 using Cashflow;
 
@@ -20,6 +21,14 @@ namespace TestCashflow
             Assert.AreEqual(0.01204393, curve.ForwardCurve[3], 1E-8);
             Assert.AreEqual(0.01382910, curve.ForwardCurve[4], 1E-8);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidDataException))]
+        public void CurvesConstructorCalledWithEmptyListThrowsError()
+        {
+            // TODO : assert form of error message when file is empty
+            Curve curve = new Curve(new List<double>());
+        } 
 
         [TestMethod]
         public void CurvesConstructorCalledWithListProducesSpotCurveAsListOfDoubles()

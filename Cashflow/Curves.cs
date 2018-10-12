@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Cashflow
 {
@@ -21,6 +22,11 @@ namespace Cashflow
         // class constructor - takes a List<double> as an argument
         public Curve(List<double> spotCurve)
         {
+            if (spotCurve.Count == 0)
+            {
+                throw new InvalidDataException("Cannot call constructor with empty list");
+            }
+
             _spotCurve = spotCurve;
             _forwardCurve = GetSpotCurveFromForwardCurve(_spotCurve);
         }

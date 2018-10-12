@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using System.Collections.Generic;
+using System.IO;
 
 using Cashflow;
 
@@ -32,6 +33,14 @@ namespace TestCashflow
             Assert.AreEqual(9996353, baseCashflows[2]);
             Assert.AreEqual(11190735, baseCashflows[3]);
             Assert.AreEqual(12165875, baseCashflows[4]);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidDataException))]
+        public void CashflowConstructorCalledWithEmptyListThrowsError()
+        {
+            // TODO : assert form of error message when file is empty
+            Cashflows cashflows = new Cashflows(new List<double>());
         }
 
         [TestMethod]

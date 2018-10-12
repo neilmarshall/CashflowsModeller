@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Cashflow
 {
@@ -23,6 +24,11 @@ namespace Cashflow
 
         public Cashflows(List<double> cashflows)
         {
+            if (cashflows.Count == 0)
+            {
+                throw new InvalidDataException("Cannot call constructor with empty list");
+            }
+
             BaseCashflows = cashflows;
         }
 
