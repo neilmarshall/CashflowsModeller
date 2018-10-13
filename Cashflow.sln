@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cashflow", "Cashflow\Cashflow.csproj", "{AA9BE0AB-560B-4D98-B7A6-81096741B5F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCashflow", "TestCashflow\TestCashflow.csproj", "{0012358B-F1DD-4E72-AF1C-52CCB538687E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA9BE0AB-560B-4D98-B7A6-81096741B5F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA9BE0AB-560B-4D98-B7A6-81096741B5F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA9BE0AB-560B-4D98-B7A6-81096741B5F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA9BE0AB-560B-4D98-B7A6-81096741B5F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0012358B-F1DD-4E72-AF1C-52CCB538687E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0012358B-F1DD-4E72-AF1C-52CCB538687E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0012358B-F1DD-4E72-AF1C-52CCB538687E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0012358B-F1DD-4E72-AF1C-52CCB538687E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
